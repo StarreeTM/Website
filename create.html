@@ -69,38 +69,59 @@
 <body>
 
 
-<p>Please enter your task and the associated date below:</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Storage Example</title>
+</head>
+<body>
+    <input type="text" id="userInput" placeholder="Enter something" required>
+    <input type="date" id="dateInput" required>
+    <button onclick="saveData()">Save</button>
+    <button onclick="loadData()">Load</button>
+    <div id="output"></div>
 
-<form id="taskForm">
-    <label for="task">Task:</label>
-    <input type="text" id="task" name="task" required><br><br>
-    
-    <label for="date">Date:</label>
-    <input type="date" id="date" name="date" required><br><br>
-    
-    <input type="submit" value="Submit">
-</form> 
+    <script>
+        function saveData() {
+            const userInput = document.getElementById('userInput').value;
+            const dateInput = document.getElementById('dateInput').value;
 
-<div id="output"></div>
+            if (!userInput || !dateInput) {
+                alert('Please enter both data and a date.');
+                return;
+            }
 
-<script>
-    document.getElementById('taskForm').addEventListener('submit', function(event) {
-        
-        event.preventDefault();
-        
-        
-        const task = document.getElementById('task').value;
-        const date = document.getElementById('date').value;
+           
+            let savedData = JSON.parse(localStorage.getItem('savedData')) || [];
 
-        
-        const output = document.getElementById('output');
-        output.innerHTML += `<p>Task: ${task}, Date: ${date}</p>`;
+           
+            const newEntry = {
+                text: userInput,
+                date: dateInput
+            };
 
-        
-        this.reset();
-    });
-</script>
+            
+            savedData.push(newEntry);
 
+            
+            localStorage.setItem('savedData', JSON.stringify(savedData));
+            alert('Data saved!');
+
+            
+            document.getElementById('userInput').value = '';
+            document.getElementById('dateInput').value = '';
+        }
+
+        function loadData() {
+            const savedData = JSON.parse(localStorage.getItem('savedData')) || [];
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = savedData.length > 0
+                ? savedData.map(entry => `<div>${entry.text} (Date: ${entry.date})</div>`).join('')
+                : 'No data found.';
+        }
+    </script>
 </body>
 </html>
 

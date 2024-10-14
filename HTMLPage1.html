@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Storage Example</title>
+</head>
+<body>
+    <input type="text" id="userInput" placeholder="Enter something" required>
+    <input type="date" id="dateInput" required>
+    <button onclick="saveData()">Save</button>
+    <button onclick="loadData()">Load</button>
+    <div id="output"></div>
+
+    <script>
+        function saveData() {
+            const userInput = document.getElementById('userInput').value;
+            const dateInput = document.getElementById('dateInput').value;
+
+            if (!userInput || !dateInput) {
+                alert('Please enter both data and a date.');
+                return;
+            }
+
+            // Retrieve existing data
+            let savedData = JSON.parse(localStorage.getItem('savedData')) || [];
+
+            // Create a new entry object
+            const newEntry = {
+                text: userInput,
+                date: dateInput
+            };
+
+            // Add new entry to the array
+            savedData.push(newEntry);
+
+            // Save the updated array back to local storage
+            localStorage.setItem('savedData', JSON.stringify(savedData));
+            alert('Data saved!');
+
+            // Clear the input fields
+            document.getElementById('userInput').value = '';
+            document.getElementById('dateInput').value = '';
+        }
+
+        function loadData() {
+            const savedData = JSON.parse(localStorage.getItem('savedData')) || [];
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = savedData.length > 0
+                ? savedData.map(entry => `<div>${entry.text} (Date: ${entry.date})</div>`).join('')
+                : 'No data found.';
+        }
+    </script>
+</body>
+</html>
